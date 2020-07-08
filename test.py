@@ -16,9 +16,9 @@ dev_id = 1
  
 def main(params):
     os.system('sudo ifconfig can1 down')
-    os.system('sudo ip link set can0 up type can bitrate 1000000   dbitrate 1000000 restart-ms 1000 loopback on berr-reporting on fd on')
+    os.system('sudo ip link set can1 up type can bitrate 1000000   dbitrate 1000000 restart-ms 1000 loopback on berr-reporting on fd on')
    
-    can0 = can.interface.Bus(channel = 'can0', bustype='socketcan_ctypes', bitrate=1000000, data_bitrate=8000000, fd=True)
+    can0 = can.interface.Bus(channel = 'can1', bustype='socketcan_ctypes', bitrate=1000000, data_bitrate=8000000, fd=True)
    
     message_array = bytearray(struct.pack('5f', *params))
     msg_tx = can.Message(arbitration_id=0x20*dev_id, dlc=20, data= message_array, is_fd=True, extended_id=False)
