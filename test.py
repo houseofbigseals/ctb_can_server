@@ -15,7 +15,7 @@ import numpy as np
 dev_id = 1
  
 def main(params):
-    os.system('sudo ifconfig can0 down')
+    os.system('sudo ifconfig can1 down')
     os.system('sudo ip link set can0 up type can bitrate 1000000   dbitrate 1000000 restart-ms 1000 loopback on berr-reporting on fd on')
    
     can0 = can.interface.Bus(channel = 'can0', bustype='socketcan_ctypes', bitrate=1000000, data_bitrate=8000000, fd=True)
