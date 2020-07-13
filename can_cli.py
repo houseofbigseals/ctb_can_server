@@ -8,7 +8,7 @@ import re
 import signal
 import sys
 
-# from cheetahbro_can_server.ctbro_can_commands import CtbroRTCanHandler
+from cheetahbro_can_server.ctbro_can_commands import CtbroRTCanHandler
 # why it doesnt work?
 from ctbro_can_commands import CtbroRTCanHandler
 

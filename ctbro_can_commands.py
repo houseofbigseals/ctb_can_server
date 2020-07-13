@@ -26,6 +26,9 @@ class CtbroRTCanHandler:
         self.vel_gain=vel_gain
         self.torq=torq
 
+        # lets create can and can bus
+        self.create_can()
+
     def shutdown_can(self):
         print('trying to do sudo ifconfig can{} down'.format(self.can_number))
         os.system('sudo ifconfig can{} down'.format(self.can_number))
@@ -49,6 +52,7 @@ class CtbroRTCanHandler:
         self.can_bus = can.interface.Bus(channel='can{}'.format(self.can_number), bustype='socketcan_ctypes', bitrate=1000000, data_bitrate=8000000, fd=True)
 
     def rt_main(self):
+
         # sorry
         params = [self.mech_sp, self.vel_sp, self.mech_gain, self.vel_gain, self.torq]
 
