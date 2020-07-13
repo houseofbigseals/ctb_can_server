@@ -12,48 +12,74 @@ import time
 import struct
 import numpy as np
 
-dev_id = 1
+# dev_id = 1
 
-def shutdown_can(can_number=0):
-    print('trying to do sudo ifconfig can{} down'.format(can_number))
-    os.system('sudo ifconfig can{} down'.format(can_number))
 
-def rt_main(can_number=0, dev_id=1, mech_sp=0.0, vel_sp=0.0, mech_gain=0.0, vel_gain=0.0, torq=0.0):
-    # sorry
-    params = [mech_sp, vel_sp, mech_gain, vel_gain, torq]
-    # try to create device
-    print("try to create device can{}".format(can_number))
-    os.system('sudo ifconfig can{} down'.format(can_number))
-    os.system(
-        'sudo ip link set can{} up type can bitrate 1000000   dbitrate 1000000 restart-ms 1000 loopback on berr-reporting on fd on'.format(can_number))
+class CtbroRTCanHandler:
+    """ simply to open-close canX"""
+    def __init__(self, can_number=0, dev_id=1, mech_sp=0.0, vel_sp=0.0, mech_gain=0.0, vel_gain=0.0, torq=0.0):
+        self.can_number = can_number
+        self.dev_id = dev_id
+        self.mech_sp=mech_sp
+        self.vel_sp=vel_sp
+        self.mech_gain=mech_gain
+        self.vel_gain=vel_gain
+        self.torq=torq
 
-    can0 = can.interface.Bus(channel='can{}'.format(can_number), bustype='socketcan_ctypes', bitrate=1000000, data_bitrate=8000000, fd=True)
+    def shutdown_can(self):
+        print('trying to do sudo ifconfig can{} down'.format(self.can_number))
+        os.system('sudo ifconfig can{} down'.format(self.can_number))
 
-    message_array = bytearray(struct.pack('5f', *params))
-    msg_tx = can.Message(arbitration_id=0x20 * dev_id, dlc=20, data=message_array, is_fd=True, extended_id=False)
-
-    can0.send(msg_tx, 0.5)
-
-    msg_rx = can0.recv()
-
-    while 1:
-        # we can send this message again and again to see device debug info in answers
-        # nothing exept ctrl-C will stop it
+    def stop_motor(self):
+        # stop params?
+        params = [0.0, 0.0, 0.0, 0.0, 0.0]
+        # pack params to byte message
         message_array = bytearray(struct.pack('5f', *params))
-        msg_tx = can.Message(arbitration_id=0x20 * dev_id, dlc=20, data=message_array, is_fd=True, extended_id=False)
+        msg_tx = can.Message(arbitration_id=0x20 * self.dev_id, dlc=20, data=message_array, is_fd=True, extended_id=False)
 
-        can0.send(msg_tx, 0.5)
+        self.can_bus.send(msg_tx, 0.5)
 
-        msg_rx = can0.recv()
-        print(msg_rx.data)
-        f1, f2, f3 = struct.unpack('3f', msg_rx.data)
+    def create_can(self):
+        # try to create device
+        print("try to create device can{}".format(self.can_number))
+        os.system('sudo ifconfig can{} down'.format(self.can_number))
+        os.system(
+            'sudo ip link set can{} up type can bitrate 1000000   dbitrate 1000000 restart-ms 1000 loopback on berr-reporting on fd on'.format(self.can_number))
 
-        print(msg_rx)
-        print(f1, f2, f3)
+        self.can_bus = can.interface.Bus(channel='can{}'.format(self.can_number), bustype='socketcan_ctypes', bitrate=1000000, data_bitrate=8000000, fd=True)
 
-        time.sleep(0.3)
+    def rt_main(self):
+        # sorry
+        params = [self.mech_sp, self.vel_sp, self.mech_gain, self.vel_gain, self.torq]
 
-        # can0.send(msg_tx, 0.5)
+        canX = self.can_bus
+        # pack params to byte message
+        message_array = bytearray(struct.pack('5f', *params))
+        # create msg
+        msg_tx = can.Message(arbitration_id=0x20 * self.dev_id, dlc=20, data=message_array, is_fd=True, extended_id=False)
+        # send it
+        canX.send(msg_tx, 0.5)
+
+        msg_rx = canX.recv()
+
+        while 1:
+            # we can send this message again and again to see device debug info in answers
+            # nothing exept ctrl-C will stop it
+            message_array = bytearray(struct.pack('5f', *params))
+            msg_tx = can.Message(arbitration_id=0x20 * self.dev_id, dlc=20, data=message_array, is_fd=True, extended_id=False)
+
+            canX.send(msg_tx, 0.5)
+
+            msg_rx = canX.recv()
+            print(msg_rx.data)
+            f1, f2, f3 = struct.unpack('3f', msg_rx.data)
+
+            print(msg_rx)
+            print(f1, f2, f3)
+
+            time.sleep(0.3)
+
+            # can0.send(msg_tx, 0.5)
 
 
 # TODO fix names

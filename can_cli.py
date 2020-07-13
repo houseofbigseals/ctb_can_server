@@ -8,17 +8,18 @@ import re
 import signal
 import sys
 
-# from cheetahbro_can_server.ctbro_can_commands import rt_main, shutdown_can
+# from cheetahbro_can_server.ctbro_can_commands import CtbroRTCanHandler
 # why it doesnt work?
-from ctbro_can_commands import rt_main, shutdown_can
+from ctbro_can_commands import CtbroRTCanHandler
 
 
 # sorry its global
+global_can_handler = None
 global_can_number = None
 
 # args string to autocomplete rt command
 RT_args = [
-    'can_number:0, dev_id:0, mech_sp:0.0, vel_sp:0.0, mech_gain:0.0, vel_gain:0.0, torq:0.0'
+    'can_number:0, dev_id:1, mech_sp:0.0, vel_sp:0.0, mech_gain:0.0, vel_gain:0.0, torq:0.0'
 ]
 
 # small class to create can cli shell
@@ -40,8 +41,8 @@ class MyCmd(cmd.Cmd):
 
         print("parsing input args")
         parsed_args_list = parse_RT_args(line)
-
-        rt_main(*parsed_args_list)
+        global_can_handler = CtbroRTCanHandler(*parsed_args_list)
+        global_can_handler.rt_main()
 
     def complete_rt(self, text, line, start_index, end_index):
         if text:
@@ -90,9 +91,10 @@ def exit_gracefully(signal, frame):
     # ... close any open files ...
     # print("trying gracefully delete device can{}".format(global_can_number))
     # do shutdown canX
-    if global_can_number:  # if it was set
-        print("trying gracefully delete device can{}".format(global_can_number))
-        shutdown_can(can_number=global_can_number)
+    if global_can_handler:  # if it was created
+        # print("trying gracefully delete device can{}".format(global_can_handler.))
+        global_can_handler.stop_motor()
+        global_can_handler.shutdown_can()
     print("\n exiting cli shell program")
     sys.exit(0)
 
