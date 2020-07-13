@@ -10,7 +10,7 @@ import sys
 
 # from cheetahbro_can_server.ctbro_can_commands import CtbroRTCanHandler
 # why it doesnt work?
-from .ctbro_can_commands import CtbroRTCanHandler
+from ctbro_can_commands import CtbroRTCanHandler
 
 
 # sorry its global
