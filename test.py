@@ -28,7 +28,7 @@ def main(params):
     msg_rx = can0.recv()
  
     while 1:
- 
+        # we can send this message again and again to see device debug info in answers
         message_array = bytearray(struct.pack('5f', *params))
         msg_tx = can.Message(arbitration_id=0x20*dev_id, dlc=20, data= message_array, is_fd=True, extended_id=False)
        

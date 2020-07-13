@@ -1,6 +1,6 @@
 import argparse
  
-from test import main, main1, main2, main3
+from cheetahbro_can_server.test import main, main1, main2, main3
        
 def RT_set(params):
     print(len(params))
@@ -28,14 +28,14 @@ def RF(params):
     print("U nas tut RF!")
     main3(params)
    
-def int_or_float(value):
+def int_or_float(value):  # wtf
     try:
         return int(value, 0) # handle hex int format
     except:
         return float(value) # or just float
  
 parser = argparse.ArgumentParser(description='Simple CAN communication script')
- 
+
 parser.add_argument('-RT', dest='process', action='store_const',
                     const=RT_set,
                     help='specifies RT communication')
