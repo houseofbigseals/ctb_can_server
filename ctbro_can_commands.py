@@ -34,6 +34,7 @@ class CtbroRTCanHandler:
         os.system('sudo ifconfig can{} down'.format(self.can_number))
 
     def stop_motor(self):
+        print("trying to stop motor")
         # stop params?
         params = [0.0, 0.0, 0.0, 0.0, 0.0]
         # pack params to byte message
@@ -41,6 +42,7 @@ class CtbroRTCanHandler:
         msg_tx = can.Message(arbitration_id=0x20 * self.dev_id, dlc=20, data=message_array, is_fd=True, extended_id=False)
 
         self.can_bus.send(msg_tx, 0.5)
+
 
     def create_can(self):
         # try to create device

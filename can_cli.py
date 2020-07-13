@@ -15,7 +15,7 @@ from ctbro_can_commands import CtbroRTCanHandler
 
 # sorry its global
 global_can_handler = None
-global_can_number = None
+# global_can_number = None
 
 # args string to autocomplete rt command
 RT_args = [
@@ -30,6 +30,7 @@ class MyCmd(cmd.Cmd):
             'Add here some more info'
 
     def do_rt(self, line):
+        global global_can_handler
         '''sends data to cheetahbro motor through canX interface and then in infinity loop asks for debug info\n
         can_number - number of can interface \n
         dev_id - motor device can address \n
@@ -86,7 +87,7 @@ def parse_RT_args(arg_string):
 
 
 def exit_gracefully(signal, frame):
-    global global_can_number
+    global global_can_handler
     # ... log exiting information ...
     # ... close any open files ...
     # print("trying gracefully delete device can{}".format(global_can_number))
