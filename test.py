@@ -18,23 +18,23 @@ def main(params):
     os.system('sudo ifconfig can1 down')
     os.system('sudo ip link set can1 up type can bitrate 1000000   dbitrate 1000000 restart-ms 1000 loopback on berr-reporting on fd on')
    
-    can0 = can.interface.Bus(channel = 'can1', bustype='socketcan_ctypes', bitrate=1000000, data_bitrate=8000000, fd=True)
+    can1 = can.interface.Bus(channel = 'can1', bustype='socketcan_ctypes', bitrate=1000000, data_bitrate=8000000, fd=True)
    
     message_array = bytearray(struct.pack('5f', *params))
     msg_tx = can.Message(arbitration_id=0x20*dev_id, dlc=20, data= message_array, is_fd=True, extended_id=False)
    
-    can0.send(msg_tx, 0.5)
+    can1.send(msg_tx, 0.5)
    
-    msg_rx = can0.recv()
+    msg_rx = can1.recv()
  
     while 1:
         # we can send this message again and again to see device debug info in answers
         message_array = bytearray(struct.pack('5f', *params))
         msg_tx = can.Message(arbitration_id=0x20*dev_id, dlc=20, data= message_array, is_fd=True, extended_id=False)
        
-        can0.send(msg_tx, 0.5)
+        can1.send(msg_tx, 0.5)
        
-        msg_rx = can0.recv()
+        msg_rx = can1.recv()
         print( msg_rx.data )
         f1, f2, f3 = struct.unpack('3f', msg_rx.data)
        
@@ -43,7 +43,7 @@ def main(params):
        
         time.sleep(0.3)
  
-        #can0.send(msg_tx, 0.5)
+        #can1.send(msg_tx, 0.5)
        
 def main1(params):
     os.system('sudo ifconfig can0 down')
@@ -114,3 +114,4 @@ def main3(params):
     while 1:
         msg_rx = can0.recv()
         print (msg_rx)
+

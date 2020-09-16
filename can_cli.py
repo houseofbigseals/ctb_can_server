@@ -8,8 +8,6 @@ import re
 import signal
 import sys
 
-# from cheetahbro_can_server.ctbro_can_commands import CtbroRTCanHandler
-# why it doesnt work?
 from ctbro_can_commands import CtbroRTCanHandler
 
 
@@ -31,14 +29,14 @@ class MyCmd(cmd.Cmd):
 
     def do_rt(self, line):
         global global_can_handler
-        '''sends data to cheetahbro motor through canX interface and then in infinity loop asks for debug info\n
-        can_number - number of can interface \n
-        dev_id - motor device can address \n
-        mech_sp - preferred mechanical setpoint\n
-        vel_sp - preferred velocity setpoint\n
-        mech_gain - preferred  mechanical gain\n
-        vel_gain - preferred velocity gain\n
-        torq - preferred torque of motor'''
+        'sends data to cheetahbro motor through canX interface and then in infinity loop asks for debug info\n \
+        can_number - number of can interface \n \
+        dev_id - motor device can address \n \
+        mech_sp - preferred mechanical setpoint\n \
+        vel_sp - preferred velocity setpoint\n \
+        mech_gain - preferred  mechanical gain\n \
+        vel_gain - preferred velocity gain\n \
+        torq - preferred torque of motor'
 
         print("parsing input args")
         parsed_args_list = parse_RT_args(line)
