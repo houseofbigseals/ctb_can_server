@@ -56,17 +56,20 @@ def main1():
     # data = [0b10100 , 0b0]
     #dlc = 2
 
-    msg_tx = can.Message(arbitration_id=0b00000100011, dlc=2, data=[0, 20], is_fd=True, extended_id=False)
+    msg_tx = can.Message(arbitration_id=0b00000100011, dlc=2, data=[20, 0], is_fd=True, extended_id=False)
 
     can1.send(msg_tx, 0.5)
 
     for i in range(0, 20):
-        msg_rx = can1.recv()
-        f1, f2, f3 = struct.unpack('3f', msg_rx.data)
+        try:
+            msg_rx = can1.recv()
+            f1, f2, f3 = struct.unpack('3f', msg_rx.data)
 
-        print(msg_rx)
-        print(f1, f2, f3)
-        time.sleep(0.5)
+            print(msg_rx)
+            print(f1, f2, f3)
+            time.sleep(0.5)
+        except Exception as e:
+            print(e)
 
     os.system('sudo ifconfig can1 down')
 
