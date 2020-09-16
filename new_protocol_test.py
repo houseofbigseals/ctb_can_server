@@ -60,13 +60,11 @@ def main1():
 
     can1.send(msg_tx, 0.5)
 
-    for i in range(0, 20):
+    for i in range(0, 5):
         try:
-            msg_rx = can1.recv()
+            msg_rx = can1.recv(4)
             print(msg_rx)
             f1, f2, f3 = struct.unpack('3f', msg_rx.data)
-
-            
             print(f1, f2, f3)
             time.sleep(0.5)
         except Exception as e:
