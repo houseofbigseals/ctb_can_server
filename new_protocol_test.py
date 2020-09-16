@@ -37,13 +37,13 @@ id is 11 bits and it is separated to three parts too:
 """
 
 def main1():
-    os.system('sudo ifconfig can1 down')
+    os.system('sudo ifconfig can0 down')
     os.system(
-        'sudo ip link set can1 up type can bitrate 1000000   dbitrate 1000000 restart-ms 1000 loopback on berr-reporting on fd on')
+        'sudo ip link set can0 up type can bitrate 1000000   dbitrate 1000000 restart-ms 1000 loopback on berr-reporting on fd on')
 
     # dev_id = 1
 
-    can1 = can.interface.Bus(channel='can1', bustype='socketcan_ctypes', bitrate=1000000, data_bitrate=8000000, fd=True)
+    can0 = can.interface.Bus(channel='can0', bustype='socketcan_ctypes', bitrate=1000000, data_bitrate=8000000, fd=True)
 
     # # so much Indian code
     # if type(params[1]) == float:
@@ -58,18 +58,20 @@ def main1():
 
     msg_tx = can.Message(arbitration_id=0b00000100011, dlc=2, data=[20, 0], is_fd=True, extended_id=False)
 
-    can1.send(msg_tx, 0.5)
+    can0.send(msg_tx, 0.5)
 
     print("we will send:")
     print(msg_tx)
 
     for i in range(0, 10):
         try:
-            msg_rx = can1.recv(6)
+            can0.send(msg_tx, 0.5)
+            msg_rx = can0.recv(6)
             print(msg_rx)
             # f1, f2, f3 = struct.unpack('3f', msg_rx.data)
             # print(f1, f2, f3)
             # time.sleep(0.5)
+
         except Exception as e:
             print("Error: {}".format(e))
 
