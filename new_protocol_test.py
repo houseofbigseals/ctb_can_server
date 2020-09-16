@@ -56,7 +56,7 @@ def main1():
     # data = [0b10100 , 0b0]
     #dlc = 2
 
-    msg_tx = can.Message(arbitration_id=0b00000100011, dlc=2, data=[20, 0], is_fd=True, extended_id=False)
+    msg_tx = can.Message(arbitration_id=0b00000100011, dlc=2, data=[0, 20], is_fd=True, extended_id=False)
 
     can1.send(msg_tx, 0.5)
 
