@@ -1,6 +1,6 @@
 import argparse
  
-from ctb_can_server.test import main, main1, main2, main3
+from test import main, main1, main2, main3
        
 def RT_set(params):
     print(len(params))
