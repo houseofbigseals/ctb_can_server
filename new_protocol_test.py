@@ -37,9 +37,9 @@ id is 11 bits and it is separated to three parts too:
 """
 
 def main1():
-    os.system('sudo ifconfig can0 down')
+    os.system('sudo ifconfig can1 down')
     os.system(
-        'sudo ip link set can0 up type can bitrate 1000000   dbitrate 1000000 restart-ms 1000 loopback on berr-reporting on fd on')
+        'sudo ip link set can1 up type can bitrate 1000000   dbitrate 1000000 restart-ms 1000 loopback on berr-reporting on fd on')
 
     # dev_id = 1
 
@@ -60,7 +60,7 @@ def main1():
 
     can1.send(msg_tx, 0.5)
 
-    while 1:
+    for i in range(0, 20):
         msg_rx = can1.recv()
         f1, f2, f3 = struct.unpack('3f', msg_rx.data)
 
@@ -68,6 +68,7 @@ def main1():
         print(f1, f2, f3)
         time.sleep(0.5)
 
+    os.system('sudo ifconfig can1 down')
 
 if __name__ == "__main__":
     main1()
