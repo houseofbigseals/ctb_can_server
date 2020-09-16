@@ -63,9 +63,10 @@ def main1():
     for i in range(0, 20):
         try:
             msg_rx = can1.recv()
+            print(msg_rx)
             f1, f2, f3 = struct.unpack('3f', msg_rx.data)
 
-            print(msg_rx)
+            
             print(f1, f2, f3)
             time.sleep(0.5)
         except Exception as e:
