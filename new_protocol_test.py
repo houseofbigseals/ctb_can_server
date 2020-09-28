@@ -74,8 +74,9 @@ def main1():
     print("we got:")
     print(msg_rx)
 
-    f1, f2 = struct.unpack('2B', msg_rx.data)
-    print(f1, f2)
+    # f1, f2 = struct.unpack('2B', msg_rx.data)
+    print("only data that we got:")
+    print(msg_rx.data)
 
     # can0.send(msg_tx, 0.5)
 
