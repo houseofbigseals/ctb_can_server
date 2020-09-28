@@ -63,7 +63,12 @@ def main1():
     message_array = bytearray(struct.pack('=3B', 17, 0, 0))
     # msg_tx = can.Message(arbitration_id=0x20 * 1 + 3, dlc=3, data=message_array, is_fd=True, extended_id=False)
 
-    msg_tx = can.Message(arbitration_id=0b00000100010, dlc=2, data=[12, 0], is_fd=True, extended_id=False)
+    # NOTE we can generate msg_id using short formula: 0x20*slave_id + num_of_cmd  where
+    #  0x20 is |000001|0|0000 - default msg from master to slave with id=1
+
+
+
+    msg_tx = can.Message(arbitration_id=0x20 * 1 + 12, dlc=2, data=[12, 0], is_fd=True, extended_id=False)
 
     print("we sent:")
     print(msg_tx)
@@ -74,12 +79,13 @@ def main1():
     print("we got:")
     print(msg_rx)
 
-    # f1, f2 = struct.unpack('2B', msg_rx.data)
+    os.system('sudo ifconfig can0 down')
+
     print("only data that we got:")
     print(msg_rx.data)
 
-    b1, b2 = struct.unpack('=BB', msg_rx.data)
-    print(b1, format(b2, '#010b'))
+    f1, f2, f3 = struct.unpack('3f', msg_rx.data)
+    print(f1, f2, f3)
 
     # can0.send(msg_tx, 0.5)
 
@@ -97,7 +103,7 @@ def main1():
     #     except Exception as e:
     #         print("Error: {}".format(e))
 
-    os.system('sudo ifconfig can1 down')
+
 
 if __name__ == "__main__":
     main1()
