@@ -68,7 +68,7 @@ def main1():
 
 
 
-    msg_tx = can.Message(arbitration_id=0x20 * 1 + 2, dlc=2, data=[0, 0], is_fd=True, extended_id=False)
+    msg_tx = can.Message(arbitration_id=0x20 * 1 + 2, dlc=2, data=[10, 0], is_fd=True, extended_id=False)
 
     print("we sent:")
     print(msg_tx)
