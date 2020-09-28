@@ -63,11 +63,11 @@ def main1():
     message_array = bytearray(struct.pack('=3B', 17, 0, 0))
     # msg_tx = can.Message(arbitration_id=0x20 * 1 + 3, dlc=3, data=message_array, is_fd=True, extended_id=False)
 
-    msg_tx = can.Message(arbitration_id=0b00000100011, dlc=2, data=[1, 0], is_fd=True, extended_id=False)
+    msg_tx = can.Message(arbitration_id=0b00000100010, dlc=2, data=[1, 0], is_fd=True, extended_id=False)
     can0.send(msg_tx, 0.5)
 
 
-    can0.send(msg_tx, 0.5)
+    # can0.send(msg_tx, 0.5)
 
     print("we will send:")
     print(msg_tx)
