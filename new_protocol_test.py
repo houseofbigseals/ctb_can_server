@@ -78,6 +78,9 @@ def main1():
     print("only data that we got:")
     print(msg_rx.data)
 
+    b1, b2 = struct.unpack('=BB', msg_rx.data)
+    print(b1, format(b2, '#010b'))
+
     # can0.send(msg_tx, 0.5)
 
 
