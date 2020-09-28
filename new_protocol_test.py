@@ -63,26 +63,35 @@ def main1():
     message_array = bytearray(struct.pack('=3B', 17, 0, 0))
     # msg_tx = can.Message(arbitration_id=0x20 * 1 + 3, dlc=3, data=message_array, is_fd=True, extended_id=False)
 
-    msg_tx = can.Message(arbitration_id=0b00000100010, dlc=2, data=[0, 0], is_fd=True, extended_id=False)
+    msg_tx = can.Message(arbitration_id=0b00000100010, dlc=2, data=[12, 0], is_fd=True, extended_id=False)
+
+    print("we sent:")
+    print(msg_tx)
+
     can0.send(msg_tx, 0.5)
 
+    msg_rx = can0.recv(6)
+    print("we got:")
+    print(msg_rx)
+
+    f1, f2 = struct.unpack('2B', msg_rx.data)
+    print(f1, f2)
 
     # can0.send(msg_tx, 0.5)
 
-    print("we will send:")
-    print(msg_tx)
 
-    for i in range(0, 10):
-        try:
-            can0.send(msg_tx, 0.5)
-            msg_rx = can0.recv(6)
-            print(msg_rx)
-            # f1, f2, f3 = struct.unpack('3f', msg_rx.data)
-            # print(f1, f2, f3)
-            # time.sleep(0.5)
 
-        except Exception as e:
-            print("Error: {}".format(e))
+    # for i in range(0, 10):
+    #     try:
+    #         can0.send(msg_tx, 0.5)
+    #         msg_rx = can0.recv(6)
+    #         print(msg_rx)
+    #         # f1, f2, f3 = struct.unpack('3f', msg_rx.data)
+    #         # print(f1, f2, f3)
+    #         # time.sleep(0.5)
+    #
+    #     except Exception as e:
+    #         print("Error: {}".format(e))
 
     os.system('sudo ifconfig can1 down')
 
