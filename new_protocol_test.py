@@ -84,7 +84,7 @@ def main1():
     print("only data that we got:")
     print(msg_rx.data)
 
-    f1, f2, f3 = struct.unpack('3f', msg_rx.data)
+    f1, f2, f3 = struct.unpack('3B', msg_rx.data)
     print(f1, f2, f3)
 
     # can0.send(msg_tx, 0.5)
