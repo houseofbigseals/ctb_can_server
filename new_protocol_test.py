@@ -66,16 +66,15 @@ def main1():
     # NOTE we can generate msg_id using short formula: 0x20*slave_id + num_of_cmd  where
     #  0x20 is |000001|0|0000 - default msg from master to slave with id=1
 
-
-
-    msg_tx = can.Message(arbitration_id=0x20 * 1 + 2, dlc=2, data=[10, 0], is_fd=True, extended_id=False)
+    message_array = bytearray(struct.pack('=2B', 10, 0))
+    msg_tx = can.Message(arbitration_id=0x20 * 1 + 2, dlc=2, data=message_array, is_fd=True, extended_id=False)
 
     print("we sent:")
     print(msg_tx)
 
     can0.send(msg_tx, 0.5)
 
-    msg_rx = can0.recv(6)
+    msg_rx = can0.recv()
     print("we got:")
     print(msg_rx)
 
@@ -84,8 +83,11 @@ def main1():
     print("only data that we got:")
     print(msg_rx.data)
 
-    f1, f2, f3 = struct.unpack('3B', msg_rx.data)
-    print(f1, f2, f3)
+    b1, b2, b3 = struct.unpack('=BBB', msg_rx.data)
+    print(b1, format(b2, '#010b'), b3)
+
+    # f1, f2, f3 = struct.unpack('3B', msg_rx.data)
+    # print(f1, f2, f3)
 
     # can0.send(msg_tx, 0.5)
 
@@ -187,5 +189,5 @@ def main2():
 
 
 if __name__ == "__main__":
-    # main1()
-    main2()
+    main1()
+    # main2()
