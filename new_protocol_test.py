@@ -104,6 +104,63 @@ def main1():
     #         print("Error: {}".format(e))
 
 
+def main2():
+    os.system('sudo ifconfig can0 down')
+    os.system(
+        'sudo ip link set can0 up type can bitrate 1000000   dbitrate 1000000 restart-ms 1000 loopback on berr-reporting on fd on')
+
+    # dev_id = 1
+
+    can0 = can.interface.Bus(channel='can0', bustype='socketcan_ctypes', bitrate=1000000, data_bitrate=8000000, fd=True)
+
+    # # so much Indian code
+    # if type(params[1]) == float:
+    #     message_array = bytearray(struct.pack('Lf', *params))
+    # else:
+    #     message_array = bytearray(struct.pack('LL', *params))
+
+    # lets create new message
+    # example id = 0b00000100011   (|000001|0|0011|)
+    # data = [0b10100 , 0b0]
+    # dlc = 2
+
+    # msg_tx = can.Message(arbitration_id=0b00000100011, dlc=2, data=[20, 0], is_fd=True, extended_id=False)
+
+    message_array = bytearray(struct.pack('=3B', 17, 0, 0))
+    # msg_tx = can.Message(arbitration_id=0x20 * 1 + 3, dlc=3, data=message_array, is_fd=True, extended_id=False)
+
+    # NOTE we can generate msg_id using short formula: 0x20*slave_id + num_of_cmd  where
+    #  0x20 is |000001|0|0000 - default msg from master to slave with id=1
+
+    # msg_tx = can.Message(arbitration_id=0x20 * 1 + 2, dlc=2, data=[10, 0], is_fd=True, extended_id=False)
+    #
+    # print("we sent:")
+    # print(msg_tx)
+    #
+    # can0.send(msg_tx, 0.5)
+    #
+    # msg_rx = can0.recv(6)
+    # print("we got:")
+    # print(msg_rx)
+
+    # unlock EEPROM
+    message_array = bytearray(struct.pack('=3B', 17, 0, 0))
+    msg_tx = can.Message(arbitration_id=0x20 * 1 + 3, dlc=3, data=message_array, is_fd=True, extended_id=False)
+    can0.send(msg_tx, 0.5)
+
+    msg_rx = can0.recv()
+    b1, b2 = struct.unpack('=BB', msg_rx.data)
+    print(b1, format(b2, '#010b'))
+
+    os.system('sudo ifconfig can0 down')
+
+    print("only data that we got:")
+    print(msg_rx.data)
+
+    f1, f2, f3 = struct.unpack('3B', msg_rx.data)
+    print(f1, f2, f3)
+
 
 if __name__ == "__main__":
-    main1()
+    # main1()
+    main2()
