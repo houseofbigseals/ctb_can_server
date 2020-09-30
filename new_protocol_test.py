@@ -152,6 +152,17 @@ def main2():
     b1, b2 = struct.unpack('=BB', msg_rx.data)
     print(b1, format(b2, '#010b'))
 
+    # enable motor
+    message_array = bytearray(struct.pack('=3B', 12, 0, 2))
+    msg_tx = can.Message(arbitration_id=0x20 * 1 + 3, dlc=3, data=message_array, is_fd=True, extended_id=False)
+    can0.send(msg_tx, 0.5)
+
+    msg_rx = can0.recv()
+    b1, b2 = struct.unpack('=BB', msg_rx.data)
+    print(b1, format(b2, '#010b'))
+
+
+
     os.system('sudo ifconfig can0 down')
 
     print("only data that we got:")
@@ -159,6 +170,9 @@ def main2():
 
     f1, f2, f3 = struct.unpack('3B', msg_rx.data)
     print(f1, f2, f3)
+
+
+
 
 
 if __name__ == "__main__":
