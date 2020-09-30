@@ -168,8 +168,8 @@ def main2():
     print("only data that we got:")
     print(msg_rx.data)
 
-    f1, f2, f3 = struct.unpack('3B', msg_rx.data)
-    print(f1, f2, f3)
+    # f1, f2, f3 = struct.unpack('3B', msg_rx.data)
+    # print(f1, f2, f3)
 
 
 
